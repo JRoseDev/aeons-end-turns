@@ -17,7 +17,9 @@ export const Card: FC<CardProps> = ({
 }) => {
     return (
         <div
-            className={`relative transition-transform duration-500 cursor-pointer`}
+            className={`relative transition-transform duration-500 ${
+                onClick == null ? '' : 'cursor-pointer'
+            }`}
             style={{
                 height: 88 * scale,
                 width: 63 * scale,

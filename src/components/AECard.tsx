@@ -6,7 +6,7 @@ import GemCardFront from '../assets/GemBlank.png';
 import RelicCardFront from '../assets/RelicBlank.png';
 import SpellCardFront from '../assets/SpellBlank.png';
 
-type AECardType = 'Gem' | 'Relic' | 'Spell';
+export type AECardType = 'Gem' | 'Relic' | 'Spell';
 
 interface AECardProps extends Omit<CardProps, 'front' | 'back'> {
     type: AECardType;
