@@ -1,6 +1,6 @@
 import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
-import { Card } from './components/Card';
 import { useState } from 'react';
+import { AECard } from './components/AECard';
 
 function App() {
     const [isFaceUp, setIsFaceUp] = useState(true);
@@ -13,10 +13,9 @@ function App() {
                 </NavbarContent>
             </Navbar>
             <div>
-                <Card
+                <AECard
+                    type='Gem'
                     isFaceUp={isFaceUp}
-                    front={'Front!'}
-                    back={'Back!'}
                     onClick={() => setIsFaceUp(!isFaceUp)}
                 />
             </div>

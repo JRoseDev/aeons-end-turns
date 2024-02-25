@@ -26,17 +26,13 @@ export const Card: FC<CardProps> = ({
             onClick={() => onClick?.(isFaceUp)}
         >
             <div
-                className={
-                    'w-full h-full absolute  border-green-600 border-2 bg-green-950'
-                }
+                className={'w-full h-full absolute'}
                 style={{ backfaceVisibility: 'hidden' }}
             >
                 {front}
             </div>
             <div
-                className={
-                    'w-full h-full absolute  border-purple-600 border-2 bg-purple-950'
-                }
+                className={'w-full h-full absolute'}
                 style={{
                     backfaceVisibility: 'hidden',
                     transform: 'rotateY(180deg)',
