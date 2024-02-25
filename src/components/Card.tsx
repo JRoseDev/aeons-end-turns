@@ -1,6 +1,8 @@
 import { FC, ReactNode } from 'react';
+import clsx from 'clsx';
 
 export interface CardProps {
+    className?: string;
     isFaceUp?: boolean;
     front: ReactNode;
     back: ReactNode;
@@ -9,6 +11,7 @@ export interface CardProps {
 }
 
 export const Card: FC<CardProps> = ({
+    className,
     isFaceUp = true,
     front,
     back,
@@ -17,9 +20,11 @@ export const Card: FC<CardProps> = ({
 }) => {
     return (
         <div
-            className={`relative transition-transform duration-500 ${
-                onClick == null ? '' : 'cursor-pointer'
-            }`}
+            className={clsx(
+                className,
+                `relative transition-transform duration-500`,
+                { 'cursor-pointer': onClick != null }
+            )}
             style={{
                 height: 88 * scale,
                 width: 63 * scale,

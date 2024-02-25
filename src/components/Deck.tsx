@@ -1,6 +1,8 @@
 import { FC, ReactNode } from 'react';
+import clsx from 'clsx';
 
 interface DeckProps {
+    className?: string;
     cards: ReactNode[];
 }
 
@@ -10,9 +12,9 @@ function getRandom(min: number, max: number) {
     return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
 }
 
-export const Deck: FC<DeckProps> = ({ cards }) => {
+export const Deck: FC<DeckProps> = ({ cards, className }) => {
     return (
-        <div className='relative'>
+        <div className={clsx(className, 'relative')}>
             {cards.map((c) => {
                 return (
                     <div
