@@ -1,9 +1,10 @@
 import { FC, ReactNode } from 'react';
 
-interface CardProps {
+export interface CardProps {
     isFaceUp?: boolean;
     front: ReactNode;
     back: ReactNode;
+    scale?: number;
     onClick?: (isFaceUp: boolean) => void;
 }
 
@@ -11,14 +12,15 @@ export const Card: FC<CardProps> = ({
     isFaceUp = true,
     front,
     back,
+    scale = 1,
     onClick,
 }) => {
     return (
         <div
-            className={`relative transition-transform duration-500`}
+            className={`relative transition-transform duration-500 cursor-pointer`}
             style={{
-                height: 88,
-                width: 63,
+                height: 88 * scale,
+                width: 63 * scale,
                 perspective: '1000px',
                 transformStyle: 'preserve-3d',
                 transform: !isFaceUp ? 'rotateY(180deg)' : 'none',

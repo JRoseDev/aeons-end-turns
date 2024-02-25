@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Card } from './Card';
+import { Card, CardProps } from './Card';
 import PlayerCardBack from '../assets/PlayerCardBack.jpg';
 import { Image } from '@nextui-org/react';
 import GemCardFront from '../assets/GemBlank.png';
@@ -8,10 +8,8 @@ import SpellCardFront from '../assets/SpellBlank.png';
 
 type AECardType = 'Gem' | 'Relic' | 'Spell';
 
-interface CardProps {
-    isFaceUp?: boolean;
+interface AECardProps extends Omit<CardProps, 'front' | 'back'> {
     type: AECardType;
-    onClick?: (isFaceUp: boolean) => void;
 }
 
 const getFrontImage = (cardType: AECardType) => {
@@ -30,7 +28,7 @@ const getFrontImage = (cardType: AECardType) => {
     }
 };
 
-export const AECard: FC<CardProps> = ({ isFaceUp = true, type, onClick }) => {
+export const AECard: FC<AECardProps> = ({ isFaceUp = true, type, ...rest }) => {
     const frontImage = getFrontImage(type);
 
     return (
@@ -38,7 +36,7 @@ export const AECard: FC<CardProps> = ({ isFaceUp = true, type, onClick }) => {
             isFaceUp={isFaceUp}
             front={<Image src={frontImage} />}
             back={<Image src={PlayerCardBack} />}
-            onClick={onClick}
+            {...rest}
         />
     );
 };
