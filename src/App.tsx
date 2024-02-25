@@ -1,8 +1,13 @@
+import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
+
 function App() {
     return (
-        <div className='font-thin'>
-            <h1>Aeons End Turns</h1>
-            <p>A description goes here.</p>
+        <div className='h-screen w-screen'>
+            <Navbar position='sticky'>
+                <NavbarContent>
+                    <NavbarBrand>Aeon's End Turns</NavbarBrand>
+                </NavbarContent>
+            </Navbar>
         </div>
     );
 }
