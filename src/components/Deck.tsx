@@ -14,11 +14,11 @@ function getRandom(min: number, max: number) {
 
 export const Deck: FC<DeckProps> = ({ cards, className }) => {
     return (
-        <div className={clsx(className, 'relative')}>
-            {cards.map((c) => {
+        <div className={clsx(className, 'relative p-2')}>
+            {cards.map((c, i) => {
                 return (
                     <div
-                        className='absolute'
+                        className={clsx({ absolute: i > 0, 'top-0': i > 0 })}
                         style={{ transform: `rotate(${getRandom(-2, 3)}deg)` }}
                     >
                         {c}
