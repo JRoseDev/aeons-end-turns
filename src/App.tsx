@@ -5,18 +5,20 @@ import { motion } from 'framer-motion';
 import { ReactNode, useCallback, useRef, useState } from 'react';
 import { AECardModel, newCard } from './model/AECardModel';
 import { Facing } from './components/Card';
+import { turnOrderCards } from './model/TurnOrderCards';
 
 type DeckCard = AECardModel & { render?: (card: AECardModel) => ReactNode };
 
-const renderCard = ({ type, isFaceUp, id, render }: DeckCard) => {
+const renderCard = ({ type, isFaceUp, id, cardName, render }: DeckCard) => {
     if (render != null) {
-        return render({ type, isFaceUp, id });
+        return render({ type, isFaceUp, id, cardName });
     }
 
     return (
         <AECard
             key={id}
             type={type}
+            cardName={cardName}
             facing={isFaceUp ? 'faceUp' : 'faceDown'}
             scale={2}
         />
@@ -27,9 +29,9 @@ function App() {
     const [testCardFacing, setTestCardFacing] = useState<Facing>('faceDown');
 
     const [deck, setDeck] = useState<DeckCard[]>(
-        Array(5)
-            .fill(0)
-            .map(() => newCard('gem', { isFaceUp: false }))
+        Object.values(turnOrderCards).map((name) =>
+            newCard('turnOrder', { isFaceUp: false, cardName: name })
+        )
     );
 
     const [discard, setDiscard] = useState<DeckCard[]>(
@@ -78,6 +80,7 @@ function App() {
                             <AECard
                                 key={card.id}
                                 type={card.type}
+                                cardName={card.cardName}
                                 initialFacing='faceDown'
                                 facing='faceUp'
                                 scale={2}
