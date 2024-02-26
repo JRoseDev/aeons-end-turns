@@ -5,8 +5,7 @@ import { Image } from '@nextui-org/react';
 import GemCardFront from '../assets/GemBlank.png';
 import RelicCardFront from '../assets/RelicBlank.png';
 import SpellCardFront from '../assets/SpellBlank.png';
-
-export type AECardType = 'Gem' | 'Relic' | 'Spell';
+import { AECardType } from '../model/AECardModel';
 
 interface AECardProps extends Omit<CardProps, 'front' | 'back'> {
     type: AECardType;
@@ -14,13 +13,13 @@ interface AECardProps extends Omit<CardProps, 'front' | 'back'> {
 
 const getFrontImage = (cardType: AECardType) => {
     switch (cardType) {
-        case 'Gem':
+        case 'gem':
             return GemCardFront;
 
-        case 'Relic':
+        case 'relic':
             return RelicCardFront;
 
-        case 'Spell':
+        case 'spell':
             return SpellCardFront;
 
         default:
@@ -28,12 +27,11 @@ const getFrontImage = (cardType: AECardType) => {
     }
 };
 
-export const AECard: FC<AECardProps> = ({ isFaceUp = true, type, ...rest }) => {
+export const AECard: FC<AECardProps> = ({ type, ...rest }) => {
     const frontImage = getFrontImage(type);
 
     return (
         <Card
-            isFaceUp={isFaceUp}
             front={<Image src={frontImage} />}
             back={<Image src={PlayerCardBack} />}
             {...rest}

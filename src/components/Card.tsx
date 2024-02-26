@@ -1,38 +1,53 @@
 import { FC, ReactNode } from 'react';
 import clsx from 'clsx';
+import { motion } from 'framer-motion';
+
+const variants = {
+    faceUp: {
+        transform: 'rotateY(0)',
+        transition: { duration: 0.6 },
+    },
+    faceDown: {
+        transform: 'rotateY(180deg)',
+        transition: { duration: 0.6 },
+    },
+};
+
+export type Facing = keyof typeof variants;
 
 export interface CardProps {
     className?: string;
-    isFaceUp?: boolean;
+    initialFacing?: Facing;
+    facing?: Facing;
     front: ReactNode;
     back: ReactNode;
     scale?: number;
-    onClick?: (isFaceUp: boolean) => void;
+    onClick?: (facing: Facing) => void;
 }
 
 export const Card: FC<CardProps> = ({
     className,
-    isFaceUp = true,
+    initialFacing,
+    facing = 'faceUp',
     front,
     back,
     scale = 1,
     onClick,
 }) => {
     return (
-        <div
-            className={clsx(
-                className,
-                `relative transition-transform duration-500`,
-                { 'cursor-pointer': onClick != null }
-            )}
+        <motion.div
+            variants={variants}
+            initial={initialFacing ?? facing}
+            animate={facing}
+            className={clsx(className, 'relative', {
+                'cursor-pointer': onClick != null,
+            })}
             style={{
                 height: 88 * scale,
                 width: 63 * scale,
-                perspective: '1000px',
                 transformStyle: 'preserve-3d',
-                transform: !isFaceUp ? 'rotateY(180deg)' : 'none',
             }}
-            onClick={() => onClick?.(isFaceUp)}
+            onClick={() => onClick?.(facing)}
         >
             <div
                 className={'w-full h-full absolute'}
@@ -49,6 +64,6 @@ export const Card: FC<CardProps> = ({
             >
                 {back}
             </div>
-        </div>
+        </motion.div>
     );
 };

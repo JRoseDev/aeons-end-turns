@@ -1,24 +1,41 @@
 import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
-import { AECard, AECardType } from './components/AECard';
+import { AECard } from './components/AECard';
 import { Deck } from './components/Deck';
 import { motion } from 'framer-motion';
-import { useCallback, useRef, useState } from 'react';
+import { ReactNode, useCallback, useRef, useState } from 'react';
+import { AECardModel, newCard } from './model/AECardModel';
+import { Facing } from './components/Card';
 
-const makeCard = (type: AECardType) => {
-    return <AECard type={type} isFaceUp={false} scale={2} />;
+type DeckCard = AECardModel & { render?: (card: AECardModel) => ReactNode };
+
+const renderCard = ({ type, isFaceUp, id, render }: DeckCard) => {
+    if (render != null) {
+        return render({ type, isFaceUp, id });
+    }
+
+    return (
+        <AECard
+            key={id}
+            type={type}
+            facing={isFaceUp ? 'faceUp' : 'faceDown'}
+            scale={2}
+        />
+    );
 };
 
 function App() {
-    const [deck, setDeck] = useState(
-        Array(50)
+    const [testCardFacing, setTestCardFacing] = useState<Facing>('faceDown');
+
+    const [deck, setDeck] = useState<DeckCard[]>(
+        Array(5)
             .fill(0)
-            .map(() => makeCard('Gem'))
+            .map(() => newCard('gem', { isFaceUp: false }))
     );
 
-    const [discard, setDiscard] = useState(
+    const [discard, setDiscard] = useState<DeckCard[]>(
         Array(3)
             .fill(0)
-            .map(() => <AECard type={'Spell'} isFaceUp={true} scale={2} />)
+            .map(() => newCard('spell'))
     );
 
     const deckRef = useRef<HTMLDivElement>(null);
@@ -43,19 +60,33 @@ function App() {
 
         const start = { x: toX - fromX, y: toY - fromY };
 
-        const topCard = (
-            <motion.div
-                style={{
-                    transform: `translate(${start.x}px,${start.y}px)`,
-                }}
-                animate={{
-                    transform: 'translate(0,0)',
-                }}
-            >
-                {deck[deck.length - 1]}
-            </motion.div>
+        setDiscard((d) =>
+            d.concat({
+                ...deck[deck.length - 1],
+                isFaceUp: true,
+                render: (card) => (
+                    <motion.div
+                        initial={{
+                            transform: `translate(${start.x}px,${start.y}px)`,
+                        }}
+                        animate={{
+                            transform: 'translate(0,0)',
+                            transition: { duration: 0.6 },
+                        }}
+                    >
+                        {
+                            <AECard
+                                key={card.id}
+                                type={card.type}
+                                initialFacing='faceDown'
+                                facing='faceUp'
+                                scale={2}
+                            />
+                        }
+                    </motion.div>
+                ),
+            })
         );
-        setDiscard((d) => d.concat(topCard));
     }, [deck]);
 
     return (
@@ -68,14 +99,28 @@ function App() {
             <div className='flex justify-between'>
                 <Deck
                     ref={deckRef}
-                    cards={deck}
+                    cards={deck.map(renderCard)}
                     onClick={() => {
                         discardTopCard();
                     }}
                 />
 
-                <Deck ref={discardRef} cards={discard} />
+                <Deck ref={discardRef} cards={discard.map(renderCard)} />
             </div>
+
+            <AECard
+                type='relic'
+                initialFacing={
+                    testCardFacing === 'faceUp' ? 'faceDown' : 'faceUp'
+                }
+                facing={testCardFacing}
+                scale={2}
+                onClick={() =>
+                    setTestCardFacing(
+                        testCardFacing === 'faceUp' ? 'faceDown' : 'faceUp'
+                    )
+                }
+            />
         </div>
     );
 }
