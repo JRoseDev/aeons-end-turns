@@ -1,4 +1,5 @@
 import { move } from '../animations/Move';
+import { getRandom } from '../util/GetRandom';
 import { AECardState } from './AECardState';
 import { State } from './State';
 
@@ -10,7 +11,8 @@ export type Action =
       }
     | {
           type: 'flipTestCard';
-      };
+      }
+    | { type: 'shuffleDiscardIntoDeck' };
 
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
@@ -36,6 +38,21 @@ export const reducer = (state: State, action: Action): State => {
 
             return { ...state, deck: newDeck, discard: newDiscard };
         }
+
+        case 'shuffleDiscardIntoDeck':
+            return {
+                ...state,
+                deck: state.deck
+                    .concat(
+                        state.discard.map((c) => ({
+                            ...c,
+                            isFaceUp: false,
+                            wasFaceUp: false,
+                        }))
+                    )
+                    .sort(() => getRandom(-1, 2)),
+                discard: [],
+            };
 
         case 'flipTestCard':
             return {

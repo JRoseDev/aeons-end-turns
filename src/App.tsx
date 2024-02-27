@@ -1,4 +1,10 @@
-import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
+import {
+    Button,
+    Navbar,
+    NavbarBrand,
+    NavbarContent,
+    NavbarMenuItem,
+} from '@nextui-org/react';
 import { useReducer, useRef } from 'react';
 import { AECard, AECardProps } from './components/AECard';
 import { Deck } from './components/Deck';
@@ -64,6 +70,15 @@ function App() {
             <Navbar position='sticky'>
                 <NavbarContent>
                     <NavbarBrand>Aeon's End Turns</NavbarBrand>
+                    <NavbarMenuItem>
+                        <Button
+                            onClick={() => {
+                                dispatch({ type: 'shuffleDiscardIntoDeck' });
+                            }}
+                        >
+                            Shuffle
+                        </Button>
+                    </NavbarMenuItem>
                 </NavbarContent>
             </Navbar>
             <div className='flex justify-between'>

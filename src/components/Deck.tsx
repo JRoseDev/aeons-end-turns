@@ -1,16 +1,11 @@
 import clsx from 'clsx';
 import { ReactNode, forwardRef, useState } from 'react';
+import { getRandom } from '../util/GetRandom';
 
 interface DeckProps {
     className?: string;
     cards: ReactNode[];
     onClick?: () => void;
-}
-
-function getRandom(min: number, max: number) {
-    const minCeiled = Math.ceil(min);
-    const maxFloored = Math.floor(max);
-    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
 }
 
 export const Deck = forwardRef<HTMLDivElement, DeckProps>(
