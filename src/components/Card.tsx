@@ -56,10 +56,14 @@ export const Card: FC<CardProps> = ({
                 {front}
             </div>
             <div
+                className='absolute w-0.5 h-full bg-white'
+                style={{ transform: 'rotateY(90deg)' }}
+            />
+            <div
                 className={'w-full h-full absolute'}
                 style={{
                     backfaceVisibility: 'hidden',
-                    transform: 'rotateY(180deg)',
+                    transform: 'rotateY(-180deg)',
                 }}
             >
                 {back}
