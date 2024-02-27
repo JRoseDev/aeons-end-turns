@@ -1,10 +1,10 @@
 import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
 import { useReducer, useRef } from 'react';
+import { AECard, AECardProps } from './components/AECard';
 import { Deck } from './components/Deck';
 import { AECardState, cardState } from './state/AECardState';
 import { reducer } from './state/Reducer';
-import { turnOrderCards } from './state/TurnOrderCards';
-import { AECard, AECardProps } from './components/AECard';
+import { turnOrderDeck } from './state/TurnOrderDecks';
 
 const renderCardState = ({
     type,
@@ -36,8 +36,9 @@ const renderCardState = ({
 
 function App() {
     const [state, dispatch] = useReducer(reducer, {
-        deck: Object.values(turnOrderCards).map((name) =>
-            cardState('turnOrder', { isFaceUp: false, cardName: name })
+        deck: turnOrderDeck({ playerCount: 2, nemesisType: 'standard' }).map(
+            (name) =>
+                cardState('turnOrder', { isFaceUp: false, cardName: name })
         ),
         discard: [],
         testCard: cardState('relic'),
