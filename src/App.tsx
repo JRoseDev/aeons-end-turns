@@ -3,11 +3,11 @@ import { AECard } from './components/AECard';
 import { Deck } from './components/Deck';
 import { motion } from 'framer-motion';
 import { ReactNode, useCallback, useRef, useState } from 'react';
-import { AECardModel, newCard } from './model/AECardModel';
+import { AECardState, cardState } from './state/AECardState';
 import { Facing } from './components/Card';
-import { turnOrderCards } from './model/TurnOrderCards';
+import { turnOrderCards } from './state/TurnOrderCards';
 
-type DeckCard = AECardModel & { render?: (card: AECardModel) => ReactNode };
+type DeckCard = AECardState & { render?: (card: AECardState) => ReactNode };
 
 const renderCard = ({ type, isFaceUp, id, cardName, render }: DeckCard) => {
     if (render != null) {
@@ -30,14 +30,14 @@ function App() {
 
     const [deck, setDeck] = useState<DeckCard[]>(
         Object.values(turnOrderCards).map((name) =>
-            newCard('turnOrder', { isFaceUp: false, cardName: name })
+            cardState('turnOrder', { isFaceUp: false, cardName: name })
         )
     );
 
     const [discard, setDiscard] = useState<DeckCard[]>(
         Array(3)
             .fill(0)
-            .map(() => newCard('spell'))
+            .map(() => cardState('spell'))
     );
 
     const deckRef = useRef<HTMLDivElement>(null);

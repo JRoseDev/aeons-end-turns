@@ -5,7 +5,7 @@ import { Image } from '@nextui-org/react';
 import GemCardFront from '../assets/GemBlank.png';
 import RelicCardFront from '../assets/RelicBlank.png';
 import SpellCardFront from '../assets/SpellBlank.png';
-import { AECardType } from '../model/AECardModel';
+import { AECardType } from '../state/AECardState';
 
 interface AECardProps extends Omit<CardProps, 'front' | 'back'> {
     type: AECardType;

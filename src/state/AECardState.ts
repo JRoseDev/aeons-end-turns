@@ -1,6 +1,6 @@
 export type AECardType = 'gem' | 'relic' | 'spell' | 'turnOrder';
 
-export interface AECardModel {
+export interface AECardState {
     id: string;
     type: AECardType;
     cardName?: string;
@@ -14,12 +14,12 @@ const cardCounts: Record<AECardType, number> = {
     turnOrder: 0,
 };
 
-export const newCard = (
+export const cardState = (
     type: AECardType,
     { isFaceUp, cardName }: { isFaceUp: boolean; cardName?: string } = {
         isFaceUp: true,
     }
-): AECardModel => {
+): AECardState => {
     const id = `${type}-${cardCounts[type]++}`;
 
     return { id, type, isFaceUp, cardName };
