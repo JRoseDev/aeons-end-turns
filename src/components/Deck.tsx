@@ -1,5 +1,5 @@
-import { ReactNode, forwardRef } from 'react';
 import clsx from 'clsx';
+import { ReactNode, forwardRef, useState } from 'react';
 
 interface DeckProps {
     className?: string;
@@ -15,6 +15,14 @@ function getRandom(min: number, max: number) {
 
 export const Deck = forwardRef<HTMLDivElement, DeckProps>(
     ({ cards, className, onClick }, ref) => {
+        const [rotations, setRotations] = useState((): number[] =>
+            cards.map(() => getRandom(-2, 3))
+        );
+
+        if (rotations.length < cards.length) {
+            setRotations(cards.map((_, i) => rotations[i] ?? getRandom(-2, 3)));
+        }
+
         return (
             <div
                 ref={ref}
@@ -32,7 +40,7 @@ export const Deck = forwardRef<HTMLDivElement, DeckProps>(
                                 'top-0': i > 0,
                             })}
                             style={{
-                                transform: `rotate(${getRandom(-2, 3)}deg)`,
+                                transform: `rotate(${rotations[i]}deg)`,
                             }}
                         >
                             {c}
