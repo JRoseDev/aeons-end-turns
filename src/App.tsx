@@ -1,96 +1,62 @@
 import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
-import { AECard } from './components/AECard';
+import { useReducer, useRef } from 'react';
 import { Deck } from './components/Deck';
-import { motion } from 'framer-motion';
-import { ReactNode, useCallback, useRef, useState } from 'react';
 import { AECardState, cardState } from './state/AECardState';
-import { Facing } from './components/Card';
+import { reducer } from './state/Reducer';
 import { turnOrderCards } from './state/TurnOrderCards';
+import { AECard, AECardProps } from './components/AECard';
 
-type DeckCard = AECardState & { render?: (card: AECardState) => ReactNode };
-
-const renderCard = ({ type, isFaceUp, id, cardName, render }: DeckCard) => {
-    if (render != null) {
-        return render({ type, isFaceUp, id, cardName });
-    }
-
-    return (
+const renderCardState = ({
+    type,
+    isFaceUp,
+    wasFaceUp,
+    id,
+    cardName,
+    animation: Animation,
+    onClick,
+}: AECardState & { onClick?: AECardProps['onClick'] }) => {
+    const card = (
         <AECard
             key={id}
             type={type}
             cardName={cardName}
             facing={isFaceUp ? 'faceUp' : 'faceDown'}
+            initialFacing={wasFaceUp ? 'faceUp' : 'faceDown'}
             scale={2}
+            onClick={onClick}
         />
     );
+
+    if (Animation != null) {
+        return <Animation>{card}</Animation>;
+    }
+
+    return card;
 };
 
 function App() {
-    const [testCardFacing, setTestCardFacing] = useState<Facing>('faceDown');
-
-    const [deck, setDeck] = useState<DeckCard[]>(
-        Object.values(turnOrderCards).map((name) =>
+    const [state, dispatch] = useReducer(reducer, {
+        deck: Object.values(turnOrderCards).map((name) =>
             cardState('turnOrder', { isFaceUp: false, cardName: name })
-        )
-    );
-
-    const [discard, setDiscard] = useState<DeckCard[]>(
-        Array(3)
-            .fill(0)
-            .map(() => cardState('spell'))
-    );
+        ),
+        discard: [],
+        testCard: cardState('relic'),
+    });
 
     const deckRef = useRef<HTMLDivElement>(null);
     const discardRef = useRef<HTMLDivElement>(null);
 
-    const discardTopCard = useCallback(() => {
+    const discardTopCard = () => {
         if (deckRef.current == null || discardRef.current == null) {
             return;
         }
 
-        setDeck((d) => d.slice(0, d.length - 1));
-
-        /**
-         * Discard is the 'from' even though we're discarding from
-         * the deck to the discard because we're removing the old
-         * element from the deck before animating the new element
-         * we added to the discard.
-         */
-        const { x: fromX, y: fromY } =
-            discardRef.current.getBoundingClientRect();
-        const { x: toX, y: toY } = deckRef.current.getBoundingClientRect();
-
-        const start = { x: toX - fromX, y: toY - fromY };
-
-        setDiscard((d) =>
-            d.concat({
-                ...deck[deck.length - 1],
-                isFaceUp: true,
-                render: (card) => (
-                    <motion.div
-                        initial={{
-                            transform: `translate(${start.x}px,${start.y}px)`,
-                        }}
-                        animate={{
-                            transform: 'translate(0,0)',
-                            transition: { duration: 0.6 },
-                        }}
-                    >
-                        {
-                            <AECard
-                                key={card.id}
-                                type={card.type}
-                                cardName={card.cardName}
-                                initialFacing='faceDown'
-                                facing='faceUp'
-                                scale={2}
-                            />
-                        }
-                    </motion.div>
-                ),
-            })
-        );
-    }, [deck]);
+        dispatch({
+            type: 'dicardTopCard',
+            deckElement: deckRef.current,
+            discardElement: discardRef.current,
+        });
+    };
 
     return (
         <div className='w-full h-screen'>
@@ -102,28 +68,24 @@ function App() {
             <div className='flex justify-between'>
                 <Deck
                     ref={deckRef}
-                    cards={deck.map(renderCard)}
+                    cards={state.deck.map(renderCardState)}
                     onClick={() => {
                         discardTopCard();
                     }}
                 />
 
-                <Deck ref={discardRef} cards={discard.map(renderCard)} />
+                <Deck
+                    ref={discardRef}
+                    cards={state.discard.map(renderCardState)}
+                />
             </div>
 
-            <AECard
-                type='relic'
-                initialFacing={
-                    testCardFacing === 'faceUp' ? 'faceDown' : 'faceUp'
-                }
-                facing={testCardFacing}
-                scale={2}
-                onClick={() =>
-                    setTestCardFacing(
-                        testCardFacing === 'faceUp' ? 'faceDown' : 'faceUp'
-                    )
-                }
-            />
+            {renderCardState({
+                ...state.testCard,
+                onClick: () => {
+                    dispatch({ type: 'flipTestCard' });
+                },
+            })}
         </div>
     );
 }

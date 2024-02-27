@@ -1,13 +1,13 @@
-import { FC } from 'react';
-import { Card, CardProps } from './Card';
-import PlayerCardBack from '../assets/PlayerCardBack.jpg';
 import { Image } from '@nextui-org/react';
+import { FC } from 'react';
 import GemCardFront from '../assets/GemBlank.png';
+import PlayerCardBack from '../assets/PlayerCardBack.jpg';
 import RelicCardFront from '../assets/RelicBlank.png';
 import SpellCardFront from '../assets/SpellBlank.png';
 import { AECardType } from '../state/AECardState';
+import { Card, CardProps } from './Card';
 
-interface AECardProps extends Omit<CardProps, 'front' | 'back'> {
+export interface AECardProps extends Omit<CardProps, 'front' | 'back'> {
     type: AECardType;
     cardName?: string;
 }
