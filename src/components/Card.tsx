@@ -50,7 +50,7 @@ export const Card: FC<CardProps> = ({
             onClick={() => onClick?.(facing)}
         >
             <div
-                className={'w-full h-full absolute'}
+                className={'w-full h-full absolute drop-shadow-lg'}
                 style={{ backfaceVisibility: 'hidden' }}
             >
                 {front}
@@ -60,7 +60,7 @@ export const Card: FC<CardProps> = ({
                 style={{ transform: 'rotateY(90deg)' }}
             />
             <div
-                className={'w-full h-full absolute'}
+                className={'w-full h-full absolute drop-shadow-lg'}
                 style={{
                     backfaceVisibility: 'hidden',
                     transform: 'rotateY(-180deg)',
