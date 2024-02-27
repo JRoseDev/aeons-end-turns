@@ -42,11 +42,11 @@ export const AECard: FC<AECardProps> = ({ type, cardName, ...rest }) => {
             front={
                 <Image
                     classNames={{ wrapper: '!max-w-full w-full h-full' }}
-                    className='object-fill w-full h-full'
+                    className='object-fill w-full h-full rounded-md'
                     src={frontImage}
                 />
             }
-            back={<Image src={PlayerCardBack} />}
+            back={<Image className='rounded-md' src={PlayerCardBack} />}
             {...rest}
         />
     );
