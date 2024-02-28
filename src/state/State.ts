@@ -6,4 +6,5 @@ export interface State {
     deck: Deck;
     discard: Deck;
     testCard: AECardState;
+    sound?: string;
 }

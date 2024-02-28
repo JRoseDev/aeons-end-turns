@@ -50,6 +50,13 @@ function App() {
         testCard: cardState('relic'),
     });
 
+    const sound = new Audio(state.sound ?? '');
+
+    if (state.sound != null) {
+        sound.play();
+        dispatch({ type: 'soundPlayed' });
+    }
+
     const deckRef = useRef<HTMLDivElement>(null);
     const discardRef = useRef<HTMLDivElement>(null);
 

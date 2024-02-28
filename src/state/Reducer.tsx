@@ -2,6 +2,8 @@ import { move } from '../animations/Move';
 import { getRandom } from '../util/GetRandom';
 import { AECardState } from './AECardState';
 import { State } from './State';
+import SuccessSound from '../assets/Success.mp3';
+import DramaticSound from '../assets/DramaticSting.mp3';
 
 export type Action =
     | {
@@ -12,7 +14,8 @@ export type Action =
     | {
           type: 'flipTestCard';
       }
-    | { type: 'shuffleDiscardIntoDeck' };
+    | { type: 'shuffleDiscardIntoDeck' }
+    | { type: 'soundPlayed' };
 
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
@@ -35,8 +38,10 @@ export const reducer = (state: State, action: Action): State => {
             };
 
             const newDiscard = state.discard.concat(card);
+            const sound =
+                card.cardName === 'Nemesis' ? DramaticSound : SuccessSound;
 
-            return { ...state, deck: newDeck, discard: newDiscard };
+            return { ...state, deck: newDeck, discard: newDiscard, sound };
         }
 
         case 'shuffleDiscardIntoDeck':
@@ -53,6 +58,9 @@ export const reducer = (state: State, action: Action): State => {
                     .sort(() => getRandom(-1, 2)),
                 discard: [],
             };
+
+        case 'soundPlayed':
+            return { ...state, sound: undefined };
 
         case 'flipTestCard':
             return {
