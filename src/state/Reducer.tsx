@@ -1,4 +1,4 @@
-import { Coords, move } from '../animations/Move';
+import { Coords } from '../animations/Move';
 import { getRandom } from '../util/GetRandom';
 import { AECardState } from './AECardState';
 import { State } from './State';
@@ -31,10 +31,11 @@ export const reducer = (state: State, action: Action): State => {
                  * element from the deck before animating the new element
                  * we added to the discard.
                  */
-                animation: move({
+                animation: {
+                    type: 'move',
                     from: action.handCoords,
                     to: action.deckCoords,
-                }),
+                },
             };
 
             const newDiscard = state.hand.concat(card);

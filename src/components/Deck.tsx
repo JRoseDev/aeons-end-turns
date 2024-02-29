@@ -1,11 +1,13 @@
 import clsx from 'clsx';
-import { ReactNode, forwardRef, useState } from 'react';
-import { getRandom } from '../util/GetRandom';
+import { forwardRef, useState } from 'react';
+import { AECardState } from '../state/AECardState';
 import { cardSizeStyle } from '../util/CardSizeStyle';
+import { getRandom } from '../util/GetRandom';
+import { AECard } from './AECard';
 
 interface DeckProps {
     className?: string;
-    cards: ReactNode[];
+    cards: AECardState[];
     scale: number;
     onClick?: () => void;
 }
@@ -23,13 +25,9 @@ export const Deck = forwardRef<HTMLDivElement, DeckProps>(
         return (
             <div
                 ref={ref}
-                className={clsx(
-                    className,
-                    'relative',
-                    {
-                        'cursor-pointer': cards.length > 0 && onClick != null,
-                    }
-                )}
+                className={clsx(className, 'relative', {
+                    'cursor-pointer': cards.length > 0 && onClick != null,
+                })}
                 style={cardSizeStyle(scale)}
                 onClick={() => cards.length > 0 && onClick?.()}
             >
@@ -42,7 +40,7 @@ export const Deck = forwardRef<HTMLDivElement, DeckProps>(
                                 transform: `rotate(${rotations[i]}deg)`,
                             }}
                         >
-                            {c}
+                            <AECard card={c} />
                         </div>
                     );
                 })}

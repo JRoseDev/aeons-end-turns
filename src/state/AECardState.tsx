@@ -1,4 +1,5 @@
-import { FC, ReactNode } from 'react';
+import { ComponentProps } from 'react';
+import { Move } from '../animations/Move';
 
 export type AECardType = 'gem' | 'relic' | 'spell' | 'turnOrder';
 
@@ -8,7 +9,9 @@ export interface AECardState {
     cardName?: string;
     isFaceUp: boolean;
     wasFaceUp: boolean;
-    animation?: FC<{ children: ReactNode }>;
+    animation?: {
+        type: 'move';
+    } & Omit<ComponentProps<typeof Move>, 'children'>;
 }
 
 const cardCounts: Record<AECardType, number> = {

@@ -18,6 +18,9 @@ export type Facing = keyof typeof variants;
 
 export interface CardProps {
     className?: string;
+    /**
+     * If different from `facing`, the card will play a flip animation
+     */
     initialFacing?: Facing;
     facing?: Facing;
     front: ReactNode;
@@ -26,6 +29,9 @@ export interface CardProps {
     onClick?: (facing: Facing) => void;
 }
 
+/**
+ * A card with front and back content which can be flipped.
+ */
 export const Card: FC<CardProps> = ({
     className,
     initialFacing,
@@ -51,7 +57,10 @@ export const Card: FC<CardProps> = ({
         >
             <div
                 className={'w-full h-full absolute drop-shadow-lg'}
-                style={{ backfaceVisibility: 'hidden', transform:'rotateY(180deg)' }}
+                style={{
+                    backfaceVisibility: 'hidden',
+                    transform: 'rotateY(180deg)',
+                }}
             >
                 {front}
             </div>

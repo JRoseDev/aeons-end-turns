@@ -6,40 +6,12 @@ import {
     NavbarMenuItem,
 } from '@nextui-org/react';
 import { useReducer, useRef } from 'react';
-import { AECard, AECardProps } from './components/AECard';
 import { Deck } from './components/Deck';
-import { AECardState, cardState } from './state/AECardState';
+import { cardState } from './state/AECardState';
 import { reducer } from './state/Reducer';
 import { turnOrderDeck } from './state/TurnOrderDecks';
 import { Fan } from './components/Fan';
-
-const renderCardState = ({
-    type,
-    isFaceUp,
-    wasFaceUp,
-    id,
-    cardName,
-    animation: Animation,
-    onClick,
-}: AECardState & { onClick?: AECardProps['onClick'] }) => {
-    const card = (
-        <AECard
-            key={id}
-            type={type}
-            cardName={cardName}
-            facing={isFaceUp ? 'faceUp' : 'faceDown'}
-            initialFacing={wasFaceUp ? 'faceUp' : 'faceDown'}
-            scale={2}
-            onClick={onClick}
-        />
-    );
-
-    if (Animation != null) {
-        return <Animation>{card}</Animation>;
-    }
-
-    return card;
-};
+import { AECard } from './components/AECard';
 
 function App() {
     const [state, dispatch] = useReducer(reducer, {
@@ -92,7 +64,7 @@ function App() {
             <div className='flex flex-col'>
                 <Deck
                     ref={deckRef}
-                    cards={state.deck.map(renderCardState)}
+                    cards={state.deck}
                     scale={2}
                     className='m-4'
                     onClick={() => {
@@ -100,19 +72,15 @@ function App() {
                     }}
                 />
 
-                <Fan
-                    ref={handRef}
-                    cards={state.hand.map(renderCardState)}
-                    className='m-4'
-                />
+                <Fan ref={handRef} cards={state.hand} className='m-4' />
             </div>
 
-            {renderCardState({
-                ...state.testCard,
-                onClick: () => {
+            <AECard
+                card={state.testCard}
+                onClick={() => {
                     dispatch({ type: 'flipTestCard' });
-                },
-            })}
+                }}
+            />
         </div>
     );
 }
