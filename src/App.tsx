@@ -11,7 +11,6 @@ import { cardState } from './state/AECardState';
 import { reducer } from './state/Reducer';
 import { turnOrderDeck } from './state/TurnOrderDecks';
 import { Fan } from './components/Fan';
-import { AECard } from './components/AECard';
 
 function App() {
     const [state, dispatch] = useReducer(reducer, {
@@ -20,7 +19,6 @@ function App() {
                 cardState('turnOrder', { isFaceUp: false, cardName: name })
         ),
         hand: [],
-        testCard: cardState('relic'),
     });
 
     const sound = new Audio(state.sound ?? '');
@@ -74,13 +72,6 @@ function App() {
 
                 <Fan ref={handRef} cards={state.hand} className='m-4' />
             </div>
-
-            <AECard
-                card={state.testCard}
-                onClick={() => {
-                    dispatch({ type: 'flipTestCard' });
-                }}
-            />
         </div>
     );
 }

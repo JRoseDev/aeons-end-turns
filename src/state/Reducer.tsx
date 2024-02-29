@@ -11,9 +11,6 @@ export type Action =
           deckCoords: Coords;
           handCoords: Coords;
       }
-    | {
-          type: 'flipTestCard';
-      }
     | { type: 'shuffleDiscardIntoDeck' }
     | { type: 'soundPlayed' };
 
@@ -62,16 +59,6 @@ export const reducer = (state: State, action: Action): State => {
 
         case 'soundPlayed':
             return { ...state, sound: undefined };
-
-        case 'flipTestCard':
-            return {
-                ...state,
-                testCard: {
-                    ...state.testCard,
-                    isFaceUp: !state.testCard.isFaceUp,
-                    wasFaceUp: state.testCard.isFaceUp,
-                },
-            };
 
         default:
             return state;
