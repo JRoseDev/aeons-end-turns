@@ -11,8 +11,13 @@ import { cardState } from './state/AECardState';
 import { reducer } from './state/Reducer';
 import { turnOrderDeck } from './state/TurnOrderDecks';
 import { Fan } from './components/Fan';
+import { useMediaPredicate } from 'react-media-hook';
 
 function App() {
+    const orientation = useMediaPredicate('(min-width: 500px)')
+        ? 'horizontal'
+        : 'vertical';
+
     const [state, dispatch] = useReducer(reducer, {
         deck: turnOrderDeck({ playerCount: 2, nemesisType: 'standard' }).map(
             (name) =>
@@ -48,7 +53,9 @@ function App() {
             <Navbar position='sticky'>
                 <NavbarContent>
                     <NavbarBrand>
-                        <h1 className='text-xl font-ae-title'>Aeon's End Turns</h1>
+                        <h1 className='text-xl font-ae-title'>
+                            Aeon's End Turns
+                        </h1>
                     </NavbarBrand>
                     <NavbarMenuItem>
                         <Button
@@ -62,7 +69,7 @@ function App() {
                     </NavbarMenuItem>
                 </NavbarContent>
             </Navbar>
-            <div className='flex flex-col'>
+            <div className='flex'>
                 <Deck
                     ref={deckRef}
                     cards={state.deck}
@@ -73,7 +80,12 @@ function App() {
                     }}
                 />
 
-                <Fan ref={handRef} cards={state.hand} className='m-4' />
+                <Fan
+                    ref={handRef}
+                    cards={state.hand}
+                    orientation={orientation}
+                    className='m-4'
+                />
             </div>
         </div>
     );

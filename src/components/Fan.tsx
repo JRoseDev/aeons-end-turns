@@ -5,6 +5,8 @@ import { AECard } from './AECard';
 
 export interface FanProps {
     className?: string;
+    orientation?: 'horizontal' | 'vertical';
+    direction?: 'standard' | 'reversed';
     cards: AECardState[];
 }
 
@@ -12,9 +14,31 @@ export interface FanProps {
  * A fan of cards laid out in a line or column
  */
 export const Fan = forwardRef<HTMLDivElement, FanProps>(
-    ({ cards, className }, ref) => {
+    (
+        {
+            cards,
+            className,
+            orientation = 'horizontal',
+            direction = 'standard',
+        },
+        ref
+    ) => {
         return (
-            <div className={clsx('flex gap-4', className)}>
+            <div
+                className={clsx(
+                    'flex gap-4 w-fit',
+                    {
+                        'flex-col': orientation === 'vertical',
+                        'flex-col-reverse':
+                            orientation === 'vertical' &&
+                            direction === 'reversed',
+                        'flex-row-reverse':
+                            orientation === 'horizontal' &&
+                            direction === 'reversed'
+                    },
+                    className
+                )}
+            >
                 {cards.map((c) => (
                     <AECard key={c.id} card={c} />
                 ))}
