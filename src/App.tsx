@@ -11,6 +11,7 @@ import { Deck } from './components/Deck';
 import { AECardState, cardState } from './state/AECardState';
 import { reducer } from './state/Reducer';
 import { turnOrderDeck } from './state/TurnOrderDecks';
+import { Fan } from './components/Fan';
 
 const renderCardState = ({
     type,
@@ -46,7 +47,7 @@ function App() {
             (name) =>
                 cardState('turnOrder', { isFaceUp: false, cardName: name })
         ),
-        discard: [],
+        hand: [],
         testCard: cardState('relic'),
     });
 
@@ -58,17 +59,17 @@ function App() {
     }
 
     const deckRef = useRef<HTMLDivElement>(null);
-    const discardRef = useRef<HTMLDivElement>(null);
+    const handRef = useRef<HTMLDivElement>(null);
 
-    const discardTopCard = () => {
-        if (deckRef.current == null || discardRef.current == null) {
+    const drawTopCard = () => {
+        if (deckRef.current == null || handRef.current == null) {
             return;
         }
 
         dispatch({
-            type: 'dicardTopCard',
-            deckElement: deckRef.current,
-            discardElement: discardRef.current,
+            type: 'drawTopCard',
+            deckCoords: deckRef.current.getBoundingClientRect(),
+            handCoords: handRef.current.getBoundingClientRect(),
         });
     };
 
@@ -88,18 +89,19 @@ function App() {
                     </NavbarMenuItem>
                 </NavbarContent>
             </Navbar>
-            <div className='flex justify-between'>
+            <div className='flex flex-col'>
                 <Deck
                     ref={deckRef}
                     cards={state.deck.map(renderCardState)}
                     onClick={() => {
-                        discardTopCard();
+                        drawTopCard();
                     }}
                 />
 
-                <Deck
-                    ref={discardRef}
-                    cards={state.discard.map(renderCardState)}
+                <Fan
+                    ref={handRef}
+                    cards={state.hand.map(renderCardState)}
+                    className='w-10'
                 />
             </div>
 

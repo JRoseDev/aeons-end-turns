@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { FC, ReactNode } from 'react';
 
-interface Coords {
+export interface Coords {
     x: number;
     y: number;
 }

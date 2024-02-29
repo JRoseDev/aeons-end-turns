@@ -1,4 +1,4 @@
-import { move } from '../animations/Move';
+import { Coords, move } from '../animations/Move';
 import { getRandom } from '../util/GetRandom';
 import { AECardState } from './AECardState';
 import { State } from './State';
@@ -7,9 +7,9 @@ import DramaticSound from '../assets/DramaticSting.mp3';
 
 export type Action =
     | {
-          type: 'dicardTopCard';
-          deckElement: HTMLDivElement;
-          discardElement: HTMLDivElement;
+          type: 'drawTopCard';
+          deckCoords: Coords;
+          handCoords: Coords;
       }
     | {
           type: 'flipTestCard';
@@ -19,7 +19,7 @@ export type Action =
 
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
-        case 'dicardTopCard': {
+        case 'drawTopCard': {
             const newDeck = state.deck.slice(0, state.deck.length - 1);
 
             const card: AECardState = {
@@ -32,16 +32,16 @@ export const reducer = (state: State, action: Action): State => {
                  * we added to the discard.
                  */
                 animation: move({
-                    from: action.discardElement.getBoundingClientRect(),
-                    to: action.deckElement.getBoundingClientRect(),
+                    from: action.handCoords,
+                    to: action.deckCoords,
                 }),
             };
 
-            const newDiscard = state.discard.concat(card);
+            const newDiscard = state.hand.concat(card);
             const sound =
                 card.cardName === 'Nemesis' ? DramaticSound : SuccessSound;
 
-            return { ...state, deck: newDeck, discard: newDiscard, sound };
+            return { ...state, deck: newDeck, hand: newDiscard, sound };
         }
 
         case 'shuffleDiscardIntoDeck':
@@ -49,14 +49,14 @@ export const reducer = (state: State, action: Action): State => {
                 ...state,
                 deck: state.deck
                     .concat(
-                        state.discard.map((c) => ({
+                        state.hand.map((c) => ({
                             ...c,
                             isFaceUp: false,
                             wasFaceUp: false,
                         }))
                     )
                     .sort(() => getRandom(-1, 2)),
-                discard: [],
+                hand: [],
             };
 
         case 'soundPlayed':

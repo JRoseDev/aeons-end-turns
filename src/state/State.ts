@@ -4,7 +4,7 @@ export type Deck = AECardState[];
 
 export interface State {
     deck: Deck;
-    discard: Deck;
+    hand: Deck;
     testCard: AECardState;
     sound?: string;
 }
