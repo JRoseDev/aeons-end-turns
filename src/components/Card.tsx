@@ -56,7 +56,7 @@ export const Card: FC<CardProps> = ({
                 {front}
             </div>
             <div
-                className='absolute w-0.5 h-full bg-white'
+                className='absolute w-0.5 h-full bg-white rounded-full'
                 style={{ transform: 'rotateY(90deg)' }}
             />
             <div
