@@ -93,6 +93,8 @@ function App() {
                 <Deck
                     ref={deckRef}
                     cards={state.deck.map(renderCardState)}
+                    scale={2}
+                    className='m-4'
                     onClick={() => {
                         drawTopCard();
                     }}
@@ -101,7 +103,7 @@ function App() {
                 <Fan
                     ref={handRef}
                     cards={state.hand.map(renderCardState)}
-                    className='w-10'
+                    className='m-4'
                 />
             </div>
 

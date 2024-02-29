@@ -1,15 +1,17 @@
 import clsx from 'clsx';
 import { ReactNode, forwardRef, useState } from 'react';
 import { getRandom } from '../util/GetRandom';
+import { cardSizeStyle } from '../util/CardSizeStyle';
 
 interface DeckProps {
     className?: string;
     cards: ReactNode[];
+    scale: number;
     onClick?: () => void;
 }
 
 export const Deck = forwardRef<HTMLDivElement, DeckProps>(
-    ({ cards, className, onClick }, ref) => {
+    ({ cards, className, scale = 1, onClick }, ref) => {
         const [rotations, setRotations] = useState((): number[] =>
             cards.map(() => getRandom(-2, 3))
         );
@@ -21,19 +23,21 @@ export const Deck = forwardRef<HTMLDivElement, DeckProps>(
         return (
             <div
                 ref={ref}
-                className={clsx(className, 'relative p-2', {
-                    'cursor-pointer': onClick != null,
-                })}
-                onClick={() => onClick?.()}
+                className={clsx(
+                    className,
+                    'relative',
+                    {
+                        'cursor-pointer': cards.length > 0 && onClick != null,
+                    }
+                )}
+                style={cardSizeStyle(scale)}
+                onClick={() => cards.length > 0 && onClick?.()}
             >
                 {cards.map((c, i) => {
                     return (
                         <div
                             key={i}
-                            className={clsx({
-                                absolute: i > 0,
-                                'top-0': i > 0,
-                            })}
+                            className='absolute top-0'
                             style={{
                                 transform: `rotate(${rotations[i]}deg)`,
                             }}

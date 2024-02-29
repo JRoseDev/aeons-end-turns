@@ -1,6 +1,7 @@
 import { FC, ReactNode } from 'react';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
+import { cardSizeStyle } from '../util/CardSizeStyle';
 
 const variants = {
     faceUp: {
@@ -43,8 +44,7 @@ export const Card: FC<CardProps> = ({
                 'cursor-pointer': onClick != null,
             })}
             style={{
-                height: 88 * scale,
-                width: 63 * scale,
+                ...cardSizeStyle(scale),
                 transformStyle: 'preserve-3d',
             }}
             onClick={() => onClick?.(facing)}
