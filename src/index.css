@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'Friz Quadrata';
+    src: url(./assets/friz-quadrata-regular.ttf) format('truetype');
+    font-weight: normal;
+}

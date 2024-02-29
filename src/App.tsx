@@ -47,9 +47,12 @@ function App() {
         <div className='w-full h-screen'>
             <Navbar position='sticky'>
                 <NavbarContent>
-                    <NavbarBrand>Aeon's End Turns</NavbarBrand>
+                    <NavbarBrand>
+                        <h1 className='text-xl font-ae-title'>Aeon's End Turns</h1>
+                    </NavbarBrand>
                     <NavbarMenuItem>
                         <Button
+                            color='primary'
                             onClick={() => {
                                 dispatch({ type: 'shuffleDiscardIntoDeck' });
                             }}
