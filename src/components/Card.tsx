@@ -5,12 +5,12 @@ import { cardSizeStyle } from '../util/CardSizeStyle';
 
 const variants = {
     faceUp: {
-        transform: 'rotateY(0)',
-        transition: { duration: 0.6 },
+        transform: 'rotateY(180deg)',
+        transition: { duration: 0.3, delay: 0.3 },
     },
     faceDown: {
-        transform: 'rotateY(180deg)',
-        transition: { duration: 0.6 },
+        transform: 'rotateY(0deg)',
+        transition: { duration: 0.3, delay: 0.3 },
     },
 };
 
@@ -51,7 +51,7 @@ export const Card: FC<CardProps> = ({
         >
             <div
                 className={'w-full h-full absolute drop-shadow-lg'}
-                style={{ backfaceVisibility: 'hidden' }}
+                style={{ backfaceVisibility: 'hidden', transform:'rotateY(180deg)' }}
             >
                 {front}
             </div>
@@ -63,7 +63,7 @@ export const Card: FC<CardProps> = ({
                 className={'w-full h-full absolute drop-shadow-lg'}
                 style={{
                     backfaceVisibility: 'hidden',
-                    transform: 'rotateY(-180deg)',
+                    transform: 'rotateY(0deg)',
                 }}
             >
                 {back}
