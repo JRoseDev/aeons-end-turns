@@ -46,7 +46,7 @@ export const Card: FC<CardProps> = ({
             variants={variants}
             initial={initialFacing ?? facing}
             animate={facing}
-            className={clsx(className, 'relative', {
+            className={clsx(className, {
                 'cursor-pointer': onClick != null,
             })}
             style={{
