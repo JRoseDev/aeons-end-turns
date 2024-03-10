@@ -36,14 +36,7 @@ function App() {
         dispatch({ type: 'soundPlayed' });
     }
 
-    const deckRef = useRef<HTMLDivElement>(null);
-    const handRef = useRef<HTMLDivElement>(null);
-
     const drawTopCard = () => {
-        if (deckRef.current == null || handRef.current == null) {
-            return;
-        }
-
         dispatch({ type: 'drawTopCard' });
     };
 
@@ -82,7 +75,6 @@ function App() {
                         })}
                     >
                         <Deck
-                            ref={deckRef}
                             cards={state.deck}
                             scale={2}
                             className='m-4'
@@ -94,7 +86,6 @@ function App() {
                 </div>
 
                 <Fan
-                    ref={handRef}
                     cards={state.hand}
                     orientation={orientation}
                     className={clsx(

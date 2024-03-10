@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { forwardRef } from 'react';
+import { useMemo, type FC } from 'react';
 import { AECardState } from '../state/AECardState';
 import { AECard } from './AECard';
 
@@ -12,8 +12,11 @@ export interface FanProps {
 /**
  * A fan of cards laid out in a line or column
  */
-export const Fan = forwardRef<HTMLDivElement, FanProps>(
-    ({ cards, className, orientation = 'horizontal' }, ref) => {
+export const Fan: FC<FanProps> = ({
+    cards,
+    className,
+    orientation = 'horizontal',
+}) => {
         return (
             <div
                 className={clsx(
@@ -37,5 +40,4 @@ export const Fan = forwardRef<HTMLDivElement, FanProps>(
                 <div key='placeholder' ref={ref} className='w-0 h-0' />
             </div>
         );
-    }
-);
+};
