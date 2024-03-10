@@ -6,7 +6,7 @@ import {
     NavbarMenuItem,
 } from '@nextui-org/react';
 import clsx from 'clsx';
-import { useReducer, useRef } from 'react';
+import { useReducer } from 'react';
 import { useMediaPredicate } from 'react-media-hook';
 import { Deck } from './components/Deck';
 import { Fan } from './components/Fan';
@@ -24,7 +24,7 @@ function App() {
         deck: shuffle(
             turnOrderDeck({ playerCount: 2, nemesisType: 'standard' })
         ).map((name) =>
-                cardState('turnOrder', { isFaceUp: false, cardName: name })
+            cardState('turnOrder', { isFaceUp: false, cardName: name })
         ),
         hand: [],
     });
@@ -88,8 +88,9 @@ function App() {
                 <Fan
                     cards={state.hand}
                     orientation={orientation}
+                    minSize={6}
                     className={clsx(
-                        'items-center m-4 justify-items-center max-h-96 grow',
+                        'items-center m-4 justify-items-center max-h-[calc(100vh-6rem)] grow',
                         {
                             'ml-auto mr-auto': orientation === 'vertical',
                             'ml-8': orientation === 'horizontal',
