@@ -5,14 +5,14 @@ import {
     NavbarContent,
     NavbarMenuItem,
 } from '@nextui-org/react';
+import clsx from 'clsx';
 import { useReducer, useRef } from 'react';
+import { useMediaPredicate } from 'react-media-hook';
 import { Deck } from './components/Deck';
+import { Fan } from './components/Fan';
 import { cardState } from './state/AECardState';
 import { reducer } from './state/Reducer';
 import { turnOrderDeck } from './state/TurnOrderDecks';
-import { Fan } from './components/Fan';
-import { useMediaPredicate } from 'react-media-hook';
-import clsx from 'clsx';
 
 function App() {
     const orientation = useMediaPredicate('(min-width: 500px)')
@@ -42,11 +42,7 @@ function App() {
             return;
         }
 
-        dispatch({
-            type: 'drawTopCard',
-            deckCoords: deckRef.current.getBoundingClientRect(),
-            handCoords: handRef.current.getBoundingClientRect(),
-        });
+        dispatch({ type: 'drawTopCard' });
     };
 
     return (

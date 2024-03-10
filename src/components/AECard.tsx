@@ -1,12 +1,12 @@
 import { Image } from '@nextui-org/react';
-import { FC, Fragment } from 'react';
+import { motion } from 'framer-motion';
+import { FC } from 'react';
 import GemCardFront from '../assets/GemBlank.png';
 import PlayerCardBack from '../assets/PlayerCardBack.jpg';
 import RelicCardFront from '../assets/RelicBlank.png';
 import SpellCardFront from '../assets/SpellBlank.png';
 import { AECardState, AECardType } from '../state/AECardState';
 import { Card, CardProps } from './Card';
-import { Move } from '../animations/Move';
 
 export type AECardProps = Omit<
     CardProps,
@@ -58,13 +58,9 @@ export const AECard: FC<AECardProps> = ({ card, ...rest }) => {
         />
     );
 
-    if (card.animation == null) {
-        return <Fragment key={card.id}>{cardElement}</Fragment>;
-    }
-
     return (
-        <Move key={card.id} {...card.animation}>
+        <motion.div key={card.id} layout layoutId={card.id}>
             {cardElement}
-        </Move>
+        </motion.div>
     );
 };
