@@ -13,6 +13,7 @@ import { Fan } from './components/Fan';
 import { cardState } from './state/AECardState';
 import { reducer } from './state/Reducer';
 import { turnOrderDeck } from './state/TurnOrderDecks';
+import { shuffle } from './state/Shuffle';
 
 function App() {
     const orientation = useMediaPredicate('(min-width: 500px)')
@@ -20,8 +21,9 @@ function App() {
         : 'vertical';
 
     const [state, dispatch] = useReducer(reducer, {
-        deck: turnOrderDeck({ playerCount: 2, nemesisType: 'standard' }).map(
-            (name) =>
+        deck: shuffle(
+            turnOrderDeck({ playerCount: 2, nemesisType: 'standard' })
+        ).map((name) =>
                 cardState('turnOrder', { isFaceUp: false, cardName: name })
         ),
         hand: [],
