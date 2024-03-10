@@ -1,7 +1,6 @@
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
-
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
@@ -21,8 +20,7 @@ export default defineConfig({
                 name: "Aeon's End Turns",
                 short_name: 'AE Turns',
                 start_url: 'https://jrosedev.github.io/aeons-end-turns/',
-                description:
-                    "A turn order card app for the card game Aeon's End.",
+                description: "A turn order card app for the card game Aeon's End.",
                 id: 'https://jrosedev.github.io/aeons-end-turns/',
                 icons: [
                     {
