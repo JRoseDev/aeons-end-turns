@@ -1,9 +1,8 @@
 import { Coords } from '../animations/Move';
-import { getRandom } from '../util/GetRandom';
+import DramaticSound from '../assets/DramaticSting.mp3';
+import SuccessSound from '../assets/Success.mp3';
 import { AECardState } from './AECardState';
 import { State } from './State';
-import SuccessSound from '../assets/Success.mp3';
-import DramaticSound from '../assets/DramaticSting.mp3';
 
 export type Action =
     | {
@@ -13,6 +12,26 @@ export type Action =
       }
     | { type: 'shuffleDiscardIntoDeck' }
     | { type: 'soundPlayed' };
+
+const shuffle = <T>(items: T[]): T[] => {
+    let currentIndex = items.length,
+        randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex > 0) {
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [items[currentIndex], items[randomIndex]] = [
+            items[randomIndex],
+            items[currentIndex],
+        ];
+    }
+
+    return items;
+};
 
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
@@ -45,15 +64,15 @@ export const reducer = (state: State, action: Action): State => {
         case 'shuffleDiscardIntoDeck':
             return {
                 ...state,
-                deck: state.deck
-                    .concat(
+                deck: shuffle(
+                    state.deck.concat(
                         state.hand.map((c) => ({
                             ...c,
                             isFaceUp: false,
                             wasFaceUp: false,
                         }))
                     )
-                    .sort(() => getRandom(-1, 2)),
+                ),
                 hand: [],
             };
 
