@@ -3,6 +3,7 @@ export type AECardType = 'gem' | 'relic' | 'spell' | 'turnOrder';
 export interface AECardState {
     id: string;
     type: AECardType;
+    owner: 'player' | 'nemesis';
     cardName?: string;
     isFaceUp: boolean;
     wasFaceUp: boolean;
@@ -19,8 +20,6 @@ export const cardState = (
     type: AECardType,
     options: Omit<AECardState, 'type' | 'id' | 'wasFaceUp'> & {
         wasFaceUp?: boolean;
-    } = {
-        isFaceUp: true,
     }
 ): AECardState => {
     const id = `${type}-${cardCounts[type]++}`;

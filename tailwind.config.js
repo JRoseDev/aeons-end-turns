@@ -14,5 +14,20 @@ export default {
         },
     },
     darkMode: 'class',
-    plugins: [nextui({ addCommonColors: true, defaultTheme: 'dark' })],
+    plugins: [
+        nextui({
+            defaultTheme: 'dark',
+            prefix: 'ae',
+            themes: {
+                dark: {
+                    extend: 'dark',
+                    colors: {
+                        background: '#0C0C0C',
+                        nemesis: '#5E0010',
+                        player: '#33830C',
+                    },
+                },
+            },
+        }),
+    ],
 };

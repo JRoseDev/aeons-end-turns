@@ -1,5 +1,5 @@
 import { Image } from '@nextui-org/react';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import { FC } from 'react';
 import GemCardFront from '../assets/GemBlank.png';
 import PlayerCardBack from '../assets/PlayerCardBack.jpg';
@@ -12,6 +12,20 @@ export type AECardProps = Omit<
     CardProps,
     'front' | 'back' | 'facing' | 'initialFacing'
 > & { card: AECardState };
+
+const variants = {
+    hover: (card: AECardState) => {
+        if (!card.isFaceUp) {
+            return {};
+        }
+
+        return {
+            boxShadow: `0px 0px 5px 4px hsl(var(--ae-${card.owner}))`,
+            transition: { duration: 0.3, delay: 0.3 },
+        };
+    },
+    default: {},
+} satisfies Variants;
 
 const getFrontImage = (cardType: AECardType, cardName?: string) => {
     switch (cardType) {
@@ -41,26 +55,30 @@ const getFrontImage = (cardType: AECardType, cardName?: string) => {
 export const AECard: FC<AECardProps> = ({ card, ...rest }) => {
     const frontImage = getFrontImage(card.type, card.cardName);
 
-    const cardElement = (
-        <Card
-            front={
-                <Image
-                    classNames={{ wrapper: '!max-w-full w-full h-full' }}
-                    className='object-fill w-full h-full rounded-md'
-                    src={frontImage}
-                />
-            }
-            back={<Image className='rounded-md' src={PlayerCardBack} />}
-            facing={card.isFaceUp ? 'faceUp' : 'faceDown'}
-            initialFacing={card.wasFaceUp ? 'faceUp' : 'faceDown'}
-            scale={2}
-            {...rest}
-        />
-    );
-
     return (
-        <motion.div key={card.id} layout layoutId={card.id}>
-            {cardElement}
+        <motion.div
+            key={card.id}
+            layout
+            layoutId={card.id}
+            variants={variants}
+            whileHover='hover'
+            custom={card}
+            className='rounded-sm'
+        >
+            <Card
+                front={
+                    <Image
+                        classNames={{ wrapper: '!max-w-full w-full h-full' }}
+                        className='object-fill w-full h-full rounded-md'
+                        src={frontImage}
+                    />
+                }
+                back={<Image className='rounded-md' src={PlayerCardBack} />}
+                facing={card.isFaceUp ? 'faceUp' : 'faceDown'}
+                initialFacing={card.wasFaceUp ? 'faceUp' : 'faceDown'}
+                scale={2}
+                {...rest}
+            />
         </motion.div>
     );
 };

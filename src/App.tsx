@@ -23,8 +23,12 @@ function App() {
     const [state, dispatch] = useReducer(reducer, {
         deck: shuffle(
             turnOrderDeck({ playerCount: 2, nemesisType: 'standard' })
-        ).map((name) =>
-            cardState('turnOrder', { isFaceUp: false, cardName: name })
+        ).map((card) =>
+            cardState('turnOrder', {
+                isFaceUp: false,
+                cardName: card.name,
+                owner: card.owner,
+            })
         ),
         hand: [],
     });
