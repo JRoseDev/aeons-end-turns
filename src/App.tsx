@@ -108,6 +108,7 @@ function App() {
                                     <CardActions card={c} onAction={dispatch} />
                                 </div>
                             }
+                            delay={500}
                             showArrow={true}
                             placement={
                                 orientation === 'vertical' ? 'left' : 'bottom'

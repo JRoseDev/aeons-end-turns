@@ -1,7 +1,9 @@
 import { Button } from '@nextui-org/react';
 import type { FC } from 'react';
-import type { Action } from '../state/Reducer';
+import { LuArrowDownToLine, LuArrowUpToLine } from 'react-icons/lu';
+import { TbCards } from 'react-icons/tb';
 import type { AECardState } from '../state/AECardState';
+import type { Action } from '../state/Reducer';
 
 interface CardActionsProps {
     card: AECardState;
@@ -20,21 +22,21 @@ export const CardActions: FC<CardActionsProps> = ({ card, onAction }) => {
                     onAction({ type: 'cardToTop', card });
                 }}
             >
-                To Top
+                <LuArrowDownToLine size={20} /> Top
             </Button>
             <Button
                 onClick={() => {
                     onAction({ type: 'shuffleCardIntoDeck', card });
                 }}
             >
-                Shuffle In
+                <TbCards size={20} /> Shuffle In
             </Button>
             <Button
                 onClick={() => {
                     onAction({ type: 'cardToBottom', card });
                 }}
             >
-                To Bottom
+                <LuArrowUpToLine size={20} /> Bottom
             </Button>
         </>
     );
