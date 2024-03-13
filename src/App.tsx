@@ -131,7 +131,7 @@ function App() {
                         </Tooltip>
                     )}
                     className={clsx(
-                        'items-center m-4 justify-items-center max-h-[calc(100vh-6rem)] grow',
+                        'place-content-center m-4  max-h-[calc(100vh-6rem)] grow',
                         {
                             'ml-auto mr-auto': orientation === 'vertical',
                             'ml-8': orientation === 'horizontal',
