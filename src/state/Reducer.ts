@@ -7,7 +7,10 @@ import { shuffle } from './Shuffle';
 export type Action =
     | { type: 'drawTopCard' }
     | { type: 'shuffleDiscardIntoDeck' }
-    | { type: 'soundPlayed' };
+    | { type: 'soundPlayed' }
+    | { type: 'cardToTop'; card: AECardState }
+    | { type: 'cardToBottom'; card: AECardState }
+    | { type: 'shuffleCardIntoDeck'; card: AECardState };
 
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
@@ -39,6 +42,48 @@ export const reducer = (state: State, action: Action): State => {
                     )
                 ),
                 hand: [],
+            };
+
+        case 'cardToTop':
+            return {
+                ...state,
+                deck: [
+                    ...state.deck,
+                    {
+                        ...action.card,
+                        isFaceUp: false,
+                        wasFaceUp: action.card.isFaceUp,
+                    },
+                ],
+                hand: state.hand.filter((c) => c.id !== action.card.id),
+            };
+
+        case 'cardToBottom':
+            return {
+                ...state,
+                deck: [
+                    {
+                        ...action.card,
+                        isFaceUp: false,
+                        wasFaceUp: action.card.isFaceUp,
+                    },
+                    ...state.deck,
+                ],
+                hand: state.hand.filter((c) => c.id !== action.card.id),
+            };
+
+        case 'shuffleCardIntoDeck':
+            return {
+                ...state,
+                deck: shuffle([
+                    ...state.deck,
+                    {
+                        ...action.card,
+                        isFaceUp: false,
+                        wasFaceUp: action.card.isFaceUp,
+                    },
+                ]),
+                hand: state.hand.filter((c) => c.id !== action.card.id),
             };
 
         case 'soundPlayed':
