@@ -4,16 +4,19 @@ import {
     NavbarBrand,
     NavbarContent,
     NavbarMenuItem,
+    Tooltip,
 } from '@nextui-org/react';
 import clsx from 'clsx';
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 import { useMediaPredicate } from 'react-media-hook';
+import { AECard } from './components/AECard';
+import { CardActions } from './components/CardActions';
 import { Deck } from './components/Deck';
 import { Fan } from './components/Fan';
-import { cardState } from './state/AECardState';
+import { AECardState, cardState } from './state/AECardState';
 import { reducer } from './state/Reducer';
-import { turnOrderDeck } from './state/TurnOrderDecks';
 import { shuffle } from './state/Shuffle';
+import { turnOrderDeck } from './state/TurnOrderDecks';
 
 function App() {
     const orientation = useMediaPredicate('(min-width: 500px)')
@@ -40,9 +43,7 @@ function App() {
         dispatch({ type: 'soundPlayed' });
     }
 
-    const drawTopCard = () => {
-        dispatch({ type: 'drawTopCard' });
-    };
+    const [animatingCards, setAnimatingCards] = useState<AECardState[]>([]);
 
     return (
         <div className='w-full h-screen'>
@@ -79,13 +80,16 @@ function App() {
                         })}
                     >
                         <Deck
-                            cards={state.deck}
                             scale={2}
                             className='m-4'
                             onClick={() => {
-                                drawTopCard();
+                                dispatch({ type: 'drawTopCard' });
                             }}
-                        />
+                        >
+                            {state.deck.map((c) => (
+                                <AECard card={c} />
+                            ))}
+                        </Deck>
                     </div>
                 </div>
 
@@ -93,6 +97,39 @@ function App() {
                     cards={state.hand}
                     orientation={orientation}
                     minSize={6}
+                    renderCard={(c) => (
+                        <Tooltip
+                            content={
+                                <div
+                                    className={clsx('flex gap-4 p-2', {
+                                        'flex-col': orientation === 'vertical',
+                                    })}
+                                >
+                                    <CardActions card={c} onAction={dispatch} />
+                                </div>
+                            }
+                            showArrow={true}
+                            placement={
+                                orientation === 'vertical' ? 'left' : 'bottom'
+                            }
+                            isDisabled={animatingCards.includes(c)}
+                        >
+                            {/* div is required for tooltip to work */}
+                            <div>
+                                <AECard
+                                    card={c}
+                                    onLayoutAnimationStart={() => {
+                                        setAnimatingCards((a) => a.concat(c));
+                                    }}
+                                    onLayoutAnimationComplete={() => {
+                                        setAnimatingCards((a) =>
+                                            a.filter((x) => x !== c)
+                                        );
+                                    }}
+                                />
+                            </div>
+                        </Tooltip>
+                    )}
                     className={clsx(
                         'items-center m-4 justify-items-center max-h-[calc(100vh-6rem)] grow',
                         {

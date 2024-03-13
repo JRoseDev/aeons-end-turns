@@ -1,13 +1,13 @@
 import clsx from 'clsx';
-import { useMemo, type FC } from 'react';
+import { useMemo, type FC, type ReactNode } from 'react';
 import { AECardState } from '../state/AECardState';
-import { AECard } from './AECard';
 import { CardPlaceholder } from './CardPlaceholder';
 
 export interface FanProps {
     className?: string;
     orientation?: 'horizontal' | 'vertical';
     cards: AECardState[];
+    renderCard: (card: AECardState) => ReactNode;
     /**
      * Set the minimum height/width of the fan (depending on orientation)
      * as if it was holding a given number of cards.
@@ -23,11 +23,14 @@ export const Fan: FC<FanProps> = ({
     className,
     orientation = 'horizontal',
     minSize,
+    renderCard,
 }) => {
     const placeholders = useMemo(() => {
         return new Array(Math.max((minSize ?? 0) - cards.length, 0))
             .fill(undefined)
-            .map((_, i) => <CardPlaceholder key={`placeholder-${i}`} scale={2} />);
+            .map((_, i) => (
+                <CardPlaceholder key={`placeholder-${i}`} scale={2} />
+            ));
     }, [minSize, cards.length]);
 
     return (
@@ -46,7 +49,7 @@ export const Fan: FC<FanProps> = ({
                         'shrink-0': i === cards.length - 1,
                     })}
                 >
-                    <AECard card={c} />
+                    {renderCard(c)}
                 </div>
             ))}
             {placeholders}

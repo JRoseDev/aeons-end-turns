@@ -11,7 +11,11 @@ import { Card, CardProps } from './Card';
 export type AECardProps = Omit<
     CardProps,
     'front' | 'back' | 'facing' | 'initialFacing'
-> & { card: AECardState };
+> & {
+    card: AECardState;
+    onLayoutAnimationStart?: () => void;
+    onLayoutAnimationComplete?: () => void;
+};
 
 const variants = {
     hover: (card: AECardState) => {
@@ -52,7 +56,12 @@ const getFrontImage = (cardType: AECardType, cardName?: string) => {
 /**
  * A specific Aeon's End card.
  */
-export const AECard: FC<AECardProps> = ({ card, ...rest }) => {
+export const AECard: FC<AECardProps> = ({
+    card,
+    onLayoutAnimationStart,
+    onLayoutAnimationComplete,
+    ...rest
+}) => {
     const frontImage = getFrontImage(card.type, card.cardName);
 
     return (
@@ -61,9 +70,11 @@ export const AECard: FC<AECardProps> = ({ card, ...rest }) => {
             layout
             layoutId={card.id}
             variants={variants}
-            whileHover='hover'
+            whileHover={'hover'}
             custom={card}
             className='rounded-sm'
+            onLayoutAnimationStart={onLayoutAnimationStart}
+            onLayoutAnimationComplete={onLayoutAnimationComplete}
         >
             <Card
                 front={
