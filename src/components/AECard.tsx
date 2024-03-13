@@ -44,7 +44,7 @@ const getFrontImage = (cardType: AECardType, cardName?: string) => {
 
         case 'turnOrder':
             return new URL(
-                `../assets/TurnOrder${cardName}.webp`,
+                `../assets/TurnOrder${cardName}.png`,
                 import.meta.url
             ).href;
 
