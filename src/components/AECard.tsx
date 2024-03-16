@@ -20,12 +20,13 @@ export type AECardProps = Omit<
 const variants = {
     hover: (card: AECardState) => {
         if (!card.isFaceUp) {
-            return {};
+            return { top: '-1rem' };
         }
 
         return {
+            top: '-1rem',
             boxShadow: `0px 0px 5px 4px hsl(var(--ae-${card.owner}))`,
-            transition: { duration: 0.3, delay: 0.3 },
+            transition: { duration: 0.3 },
         };
     },
     default: {},
@@ -72,7 +73,7 @@ export const AECard: FC<AECardProps> = ({
             variants={variants}
             whileHover={'hover'}
             custom={card}
-            className='rounded-sm'
+            className='relative rounded-sm'
             onLayoutAnimationStart={onLayoutAnimationStart}
             onLayoutAnimationComplete={onLayoutAnimationComplete}
         >
