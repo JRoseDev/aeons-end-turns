@@ -1,7 +1,6 @@
 import { FC, ReactNode } from 'react';
 import clsx from 'clsx';
-import { motion } from 'framer-motion';
-import { cardSizeStyle } from '../util/CardSizeStyle';
+import { motion, type Variants } from 'framer-motion';
 
 const variants = {
     faceUp: {
@@ -12,7 +11,7 @@ const variants = {
         transform: 'rotateY(0deg)',
         transition: { duration: 0.3, delay: 0.3 },
     },
-};
+} satisfies Variants;
 
 export type Facing = keyof typeof variants;
 
@@ -25,7 +24,6 @@ export interface CardProps {
     facing?: Facing;
     front: ReactNode;
     back: ReactNode;
-    scale?: number;
     onClick?: (facing: Facing) => void;
 }
 
@@ -38,7 +36,6 @@ export const Card: FC<CardProps> = ({
     facing = 'faceUp',
     front,
     back,
-    scale = 1,
     onClick,
 }) => {
     return (
@@ -46,17 +43,14 @@ export const Card: FC<CardProps> = ({
             variants={variants}
             initial={initialFacing ?? facing}
             animate={facing}
-            className={clsx(className, {
+            className={clsx('aspect-[63/88] grid', className, {
                 'cursor-pointer': onClick != null,
             })}
-            style={{
-                ...cardSizeStyle(scale),
-                transformStyle: 'preserve-3d',
-            }}
+            style={{ transformStyle: 'preserve-3d' }}
             onClick={() => onClick?.(facing)}
         >
             <div
-                className={'w-full h-full absolute drop-shadow-lg'}
+                className={'drop-shadow-lg col-start-1 row-start-1'}
                 style={{
                     backfaceVisibility: 'hidden',
                     transform: 'rotateY(180deg)',
@@ -65,11 +59,11 @@ export const Card: FC<CardProps> = ({
                 {front}
             </div>
             <div
-                className='absolute w-0.5 h-full bg-white rounded-full'
+                className='w-0.5 h-full col-start-1 row-start-1 bg-white rounded-full'
                 style={{ transform: 'rotateY(90deg)' }}
             />
             <div
-                className={'w-full h-full absolute drop-shadow-lg'}
+                className={'col-start-1 row-start-1 drop-shadow-lg'}
                 style={{
                     backfaceVisibility: 'hidden',
                     transform: 'rotateY(0deg)',

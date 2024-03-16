@@ -1,21 +1,14 @@
 import clsx from 'clsx';
 import { useState, type FC, type ReactNode } from 'react';
-import { cardSizeStyle } from '../util/CardSizeStyle';
 import { getRandom } from '../util/GetRandom';
 
 interface DeckProps {
     className?: string;
     children: ReactNode[];
-    scale: number;
     onClick?: () => void;
 }
 
-export const Deck: FC<DeckProps> = ({
-    children,
-    className,
-    scale = 1,
-    onClick,
-}) => {
+export const Deck: FC<DeckProps> = ({ children, className, onClick }) => {
     const [rotations, setRotations] = useState((): number[] =>
         children.map(() => getRandom(-2, 3))
     );
@@ -26,17 +19,16 @@ export const Deck: FC<DeckProps> = ({
 
     return (
         <div
-            className={clsx(className, 'relative', {
+            className={clsx(className, 'grid', {
                 'cursor-pointer': children.length > 0 && onClick != null,
             })}
-            style={cardSizeStyle(scale)}
             onClick={() => children.length > 0 && onClick?.()}
         >
             {children.map((c, i) => {
                 return (
                     <div
                         key={i}
-                        className='absolute top-0'
+                        className='col-start-1 row-start-1'
                         style={{
                             transform: `rotate(${rotations[i]}deg)`,
                         }}

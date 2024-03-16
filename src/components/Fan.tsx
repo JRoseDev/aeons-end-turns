@@ -1,10 +1,10 @@
 import clsx from 'clsx';
-import { useMemo, type FC, type ReactNode } from 'react';
+import { type FC, type ReactNode } from 'react';
 import { AECardState } from '../state/AECardState';
-import { CardPlaceholder } from './CardPlaceholder';
 
 export interface FanProps {
     className?: string;
+    classNames?: { placeholder: string };
     orientation?: 'horizontal' | 'vertical';
     cards: AECardState[];
     renderCard: (card: AECardState) => ReactNode;
@@ -22,37 +22,29 @@ export const Fan: FC<FanProps> = ({
     cards,
     className,
     orientation = 'horizontal',
-    minSize,
+    minSize = 0,
     renderCard,
 }) => {
-    const placeholders = useMemo(() => {
-        return new Array(Math.max((minSize ?? 0) - cards.length, 0))
-            .fill(undefined)
-            .map((_, i) => (
-                <CardPlaceholder key={`placeholder-${i}`} scale={2} />
-            ));
-    }, [minSize, cards.length]);
+    const size = Math.max(minSize, cards.length);
 
     return (
         <div
-            className={clsx(
-                'flex gap-4',
-                { 'flex-col': orientation === 'vertical' },
-                className
-            )}
+            className={clsx('grid gap-4', className)}
+            style={
+                orientation === 'vertical'
+                    ? {
+                          // Divide the grid into equal-sized rows, except for the last,
+                          // which gets as much space as it needs.
+                          gridTemplateRows: `repeat(${size}, calc((100% - 16rem) / ${size})) auto`,
+                      }
+                    : {
+                          gridTemplateColumns: `repeat(${size}, calc((100% - 12rem) / ${size})) ${
+                              minSize > 0 ? '' : ''
+                          }`,
+                      }
+            }
         >
-            {cards.map((c, i) => (
-                <div
-                    key={c.id}
-                    className={clsx('min-w-0 min-h-0 max-h-fit max-w-fit', {
-                        shrink: i < cards.length - 1,
-                        'shrink-0': i === cards.length - 1,
-                    })}
-                >
-                    {renderCard(c)}
-                </div>
-            ))}
-            {placeholders}
+            {cards.map((c) => renderCard(c))}
         </div>
     );
 };

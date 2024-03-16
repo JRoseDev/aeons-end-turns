@@ -18,6 +18,12 @@ import { reducer } from './state/Reducer';
 import { shuffle } from './state/Shuffle';
 import { turnOrderDeck } from './state/TurnOrderDecks';
 
+const cardSizeClass = (orientation: 'vertical' | 'horizontal') =>
+    clsx({
+        'h-[calc(88px*2)]': orientation === 'vertical',
+        'w-[calc(63px*2)]': orientation === 'horizontal',
+    });
+
 function App() {
     const orientation = useMediaPredicate('(min-width: 500px)')
         ? 'horizontal'
@@ -76,24 +82,31 @@ function App() {
                     <div
                         className={clsx({
                             'ml-auto mr-auto': orientation === 'vertical',
-                            'ml-4': orientation === 'horizontal',
+                            'ml-10': orientation === 'horizontal',
                         })}
                     >
                         <Deck
-                            scale={2}
-                            className='m-4'
+                            className='m-4 mt-8'
                             onClick={() => {
                                 dispatch({ type: 'drawTopCard' });
                             }}
                         >
                             {state.deck.map((c) => (
-                                <AECard card={c} />
+                                <AECard
+                                    card={c}
+                                    className={cardSizeClass(orientation)}
+                                />
                             ))}
                         </Deck>
                     </div>
                 </div>
 
                 <Fan
+                    className={clsx('place-content-start mt-6 mb-0 ', {
+                        'ml-auto mr-auto h-[calc(100vh-6rem)]':
+                            orientation === 'vertical',
+                        'ml-8': orientation === 'horizontal',
+                    })}
                     cards={state.hand}
                     orientation={orientation}
                     minSize={6}
@@ -111,13 +124,16 @@ function App() {
                             delay={500}
                             showArrow={true}
                             placement={
-                                orientation === 'vertical' ? 'left' : 'bottom'
+                                orientation === 'vertical'
+                                    ? 'left-start'
+                                    : 'bottom'
                             }
                             isDisabled={animatingCards.includes(c)}
                         >
                             {/* div is required for tooltip to work */}
-                            <div>
+                            <div className={cardSizeClass(orientation)}>
                                 <AECard
+                                    className={cardSizeClass(orientation)}
                                     card={c}
                                     onLayoutAnimationStart={() => {
                                         setAnimatingCards((a) => a.concat(c));
@@ -130,13 +146,6 @@ function App() {
                                 />
                             </div>
                         </Tooltip>
-                    )}
-                    className={clsx(
-                        'place-content-center m-4  max-h-[calc(100vh-6rem)] grow',
-                        {
-                            'ml-auto mr-auto': orientation === 'vertical',
-                            'ml-8': orientation === 'horizontal',
-                        }
                     )}
                 />
             </div>

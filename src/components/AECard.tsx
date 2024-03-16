@@ -7,6 +7,7 @@ import RelicCardFront from '../assets/RelicBlank.png';
 import SpellCardFront from '../assets/SpellBlank.png';
 import { AECardState, AECardType } from '../state/AECardState';
 import { Card, CardProps } from './Card';
+import clsx from 'clsx';
 
 export type AECardProps = Omit<
     CardProps,
@@ -20,7 +21,11 @@ export type AECardProps = Omit<
 const variants = {
     hover: (card: AECardState) => {
         if (!card.isFaceUp) {
-            return { top: '-1rem' };
+            return {
+                top: '-1rem',
+                boxShadow: `0px 0px 5px 4px hsl(var(--ae-foreground))`,
+                transition: { duration: 0.3 },
+            };
         }
 
         return {
@@ -73,22 +78,15 @@ export const AECard: FC<AECardProps> = ({
             variants={variants}
             whileHover={'hover'}
             custom={card}
-            className='relative rounded-sm'
+            className={clsx('relative rounded-md', rest.className)}
             onLayoutAnimationStart={onLayoutAnimationStart}
             onLayoutAnimationComplete={onLayoutAnimationComplete}
         >
             <Card
-                front={
-                    <Image
-                        classNames={{ wrapper: '!max-w-full w-full h-full' }}
-                        className='object-fill w-full h-full rounded-md'
-                        src={frontImage}
-                    />
-                }
+                front={<Image className='rounded-md' src={frontImage} />}
                 back={<Image className='rounded-md' src={PlayerCardBack} />}
                 facing={card.isFaceUp ? 'faceUp' : 'faceDown'}
                 initialFacing={card.wasFaceUp ? 'faceUp' : 'faceDown'}
-                scale={2}
                 {...rest}
             />
         </motion.div>
