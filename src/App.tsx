@@ -7,7 +7,7 @@ import {
     Tooltip,
 } from '@nextui-org/react';
 import clsx from 'clsx';
-import { useReducer, useState } from 'react';
+import { useReducer, useRef, useState } from 'react';
 import { useMediaPredicate } from 'react-media-hook';
 import { AECard } from './components/AECard';
 import { CardActions } from './components/CardActions';
@@ -17,6 +17,8 @@ import { AECardState, cardState } from './state/AECardState';
 import { reducer } from './state/Reducer';
 import { shuffle } from './state/Shuffle';
 import { turnOrderDeck } from './state/TurnOrderDecks';
+import { motion } from 'framer-motion';
+import { DragTarget } from './components/DragTarget';
 
 const cardSizeClass = (orientation: 'vertical' | 'horizontal') =>
     clsx({
@@ -41,6 +43,11 @@ function App() {
         ),
         hand: [],
     });
+
+    const pageRef = useRef<HTMLDivElement>(null);
+    const [draggingCard, setDraggingCard] = useState<AECardState | undefined>(
+        undefined
+    );
 
     const sound = new Audio(state.sound ?? '');
 
@@ -73,6 +80,7 @@ function App() {
                 </NavbarContent>
             </Navbar>
             <div
+                ref={pageRef}
                 className={clsx('grid', {
                     'grid-cols-2 grid-flow-col': orientation === 'vertical',
                     'grid-cols-1 grid-flow-row': orientation === 'horizontal',
@@ -99,6 +107,24 @@ function App() {
                             ))}
                         </Deck>
                     </div>
+
+                    <DragTarget
+                        className='w-40 h-[30%] border-2 border-foreground-200 text-foreground-500 flex place-content-center flex-wrap'
+                        dragStatus={
+                            draggingCard == null
+                                ? { type: 'notDragging' }
+                                : { type: 'dragging', target: draggingCard }
+                        }
+                        variants={{
+                            targetted: { borderColor: 'ActiveBorder' },
+                        }}
+                        whileDragOver='targetted'
+                        onDrop={(card) => {
+                            dispatch({ type: 'cardToTop', card });
+                        }}
+                    >
+                        Top
+                    </DragTarget>
                 </div>
 
                 <Fan
@@ -131,7 +157,28 @@ function App() {
                             isDisabled={animatingCards.includes(c)}
                         >
                             {/* div is required for tooltip to work */}
-                            <div className={cardSizeClass(orientation)}>
+                            <motion.div
+                                className={cardSizeClass(orientation)}
+                                drag
+                                dragConstraints={pageRef}
+                                dragMomentum={false}
+                                dragSnapToOrigin={true}
+                                whileDrag={{
+                                    zIndex: 10,
+                                    opacity: 0.7,
+                                    pointerEvents: 'none',
+                                }}
+                                onDragStart={() => {
+                                    setAnimatingCards((a) => a.concat(c));
+                                    setDraggingCard(c);
+                                }}
+                                onDragEnd={() => {
+                                    setAnimatingCards((a) =>
+                                        a.filter((x) => x !== c)
+                                    );
+                                    setDraggingCard(undefined);
+                                }}
+                            >
                                 <AECard
                                     className={cardSizeClass(orientation)}
                                     card={c}
@@ -144,7 +191,7 @@ function App() {
                                         );
                                     }}
                                 />
-                            </div>
+                            </motion.div>
                         </Tooltip>
                     )}
                 />

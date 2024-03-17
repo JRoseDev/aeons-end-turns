@@ -43,9 +43,11 @@ export const Card: FC<CardProps> = ({
             variants={variants}
             initial={initialFacing ?? facing}
             animate={facing}
-            className={clsx('aspect-[63/88] grid', className, {
-                'cursor-pointer': onClick != null,
-            })}
+            className={clsx(
+                'aspect-[63/88] grid pointer-events-none',
+                className,
+                { 'cursor-pointer': onClick != null }
+            )}
             style={{ transformStyle: 'preserve-3d' }}
             onClick={() => onClick?.(facing)}
         >
